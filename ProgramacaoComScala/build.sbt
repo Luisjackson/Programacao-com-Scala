@@ -4,6 +4,7 @@ lazy val root = rootProject
   .settings(
     name := "ProgramacaoComScala",
     libraryDependencies ++= Seq(
+      "org.apache.spark" %% "spark-sql" % "3.5.1"
       //You can add library dependencies here, for example,
       //"org.scalatest" %% "scalatest" % "3.2.19" % Test,
       //"org.scalameta" %% "munit" % "1.2.3" % Test
