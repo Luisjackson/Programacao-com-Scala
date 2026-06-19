@@ -36,7 +36,7 @@ Programacao-com-Scala/
 As atividades abaixo refletem os requisitos da trilha de Engenharia de Dados e podem ser validadas na pasta `entregaveis/`:
 
 * [x] **Projeto Base:** Projeto inicializado via SBT do zero, versionado no Git, compilando e rodando sem erros.
-* [ ] **Domínio de Sintaxe:** 10 a 15 exercícios resolvidos utilizando manipulação de coleções, funções de alta ordem (`map`, `filter`, `reduce`) e modelagem com `case classes`.
+* [ ] **Domínio de Sintaxe:** 10 a 15 exercícios resolvidos utilizando manipulação de coleções, funções de alta ordem (`map`, `filter`, `reduce`) e modelagem com `case classes`. *(Em desenvolvimento)*
 * [ ] **Mini-programa (Desafio Final):** Aplicação para ler um arquivo de texto, contar as palavras e imprimir um relatório no terminal. *(Em desenvolvimento)*
 
 ## ⚙️ Como Executar o Projeto
