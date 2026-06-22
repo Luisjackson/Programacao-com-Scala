@@ -98,21 +98,23 @@ object AnaliseSolicitacoes {
     val clientesDeAltoRisco = solicitacoesScoreBaixo.sortBy(_.scoreCredito)
     println(clientesDeAltoRisco)
 
-    println(
-      "===== RELATORIO DE CREDITO =====\n" +
-        s"TOTAL SOLICITADO: $somaValoresSolicitados\n" +
-        s"TOTAL APROVADO: $valorTotalAprovado\n" +
-        s"SCORE MÉDIO: $mediaScore\n" +
-        "Solicitacoes por status: \n" +
-        agrupadoPorStatus.foreach{ case (status, lista) =>
-          println(s"$status: " + lista.length)
-        }  +
-        s"Clientes de Alto Risco: \n" +
+    println("\n===== RELATÓRIO DE CRÉDITO =====")
+    println(s"TOTAL SOLICITADO: R$$ $somaValoresSolicitados")
+    println(s"TOTAL APROVADO: R$$ $valorTotalAprovado")
+    println(s"SCORE MÉDIO: ${mediaScore.toInt}") // .toInt para tirar o quebrado se quiser
 
-        clientesDeAltoRisco.foreach(s => println(s"${s.cliente} (Score: ${s.scoreCredito})"))
+    println("\nSolicitações por status:")
+    // O foreach roda solto aqui, sem somar com string!
+    agrupadoPorStatus.foreach { case (status, lista) =>
+      println(s"  * $status: ${lista.length}")
+    }
 
-
-    )
+    println("\nClientes de Alto Risco:")
+    // O outro foreach também roda solto aqui
+    clientesDeAltoRisco.foreach { s =>
+      println(s"  * ${s.cliente} (Score: ${s.scoreCredito})")
+    }
+    println("=====================================")
   }
 }
 AnaliseSolicitacoes.main(Array())
