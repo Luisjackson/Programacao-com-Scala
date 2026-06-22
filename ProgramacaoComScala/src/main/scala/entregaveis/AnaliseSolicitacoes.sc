@@ -47,10 +47,16 @@ object AnaliseSolicitacoes {
 
     println(tentativaConversao)
 
+    val solicitacoesValidas = tentativaConversao.filter(solicitacao =>
+      solicitacao.status == "APROVADA" ||
+        solicitacao.status == "REPROVADA" ||
+        solicitacao.status == "EM_ANALISE"
+    )
 
-    val solicitacoesAprovadas = tentativaConversao.filter(solicitacao => solicitacao.status == "APROVADA")
 
-    val valoresSolicitados = tentativaConversao.map(x => x.valorSolicitado)
+    val solicitacoesAprovadas = solicitacoesValidas.filter(solicitacao => solicitacao.status == "APROVADA")
+
+    val valoresSolicitados = solicitacoesValidas.map(x => x.valorSolicitado)
     println(valoresSolicitados)
 
     val somaValoresSolicitados = valoresSolicitados.reduce(_+_)
@@ -60,33 +66,53 @@ object AnaliseSolicitacoes {
     println(valorTotalAprovado)
 
     // Compare na lista de cliente, qual cliente tem o x1 (valorSolicitado) maior.
-    val clienteMaiorValorSolicitado = tentativaConversao.reduce((x1, x2) => if(x1.valorSolicitado > x2.valorSolicitado) x1 else x2)
+    val clienteMaiorValorSolicitado = solicitacoesValidas.reduce((x1, x2) => if(x1.valorSolicitado > x2.valorSolicitado) x1 else x2)
 
     println("Cliente com Maior Valor Solicitado " + clienteMaiorValorSolicitado)
 
-    val clienteMaiorScore = tentativaConversao.reduce((x1, x2) => if(x1.scoreCredito > x2.scoreCredito) x1 else x2)
+    val clienteMaiorScore = solicitacoesValidas.reduce((x1, x2) => if(x1.scoreCredito > x2.scoreCredito) x1 else x2)
     println("Cliente com maior Score: " + clienteMaiorScore)
 
-    val somaScore = tentativaConversao.map(_.scoreCredito).reduce(_+_)
+    val somaScore = solicitacoesValidas.map(_.scoreCredito).reduce(_+_)
     println(somaScore)
 
-    val mediaScore = somaScore.toDouble / tentativaConversao.length
+    val mediaScore = somaScore.toDouble / solicitacoesValidas.length
     println("Media de score: " + mediaScore)
 
-    val agrupadoPorStatus = tentativaConversao.groupBy(_.status)
+    val agrupadoPorStatus = solicitacoesValidas.groupBy(_.status)
     println(agrupadoPorStatus)
 
     val qtdAgrupadoPorStatus = agrupadoPorStatus.size
-    println(qtdAgrupadoPorStatus)
+    println("agrupado por status: "  + qtdAgrupadoPorStatus)
 
-    val solicitacoesScoreBaixo = tentativaConversao.filter(x => x.scoreCredito < 500)
+    val solicitacoesScoreBaixo = solicitacoesValidas.filter(x => x.scoreCredito < 500)
     println(solicitacoesScoreBaixo)
 
-    agrupadoPorStatus.foreach{ case (status, lista) =>
-      println(s"$status: " + lista.length)
-    }
 
-    
+
+
+    println(solicitacoesValidas.length)
+
+    val solicitacoesValidasAgrupadas = solicitacoesValidas.groupBy(_.status)
+
+    val clientesDeAltoRisco = solicitacoesScoreBaixo.sortBy(_.scoreCredito)
+    println(clientesDeAltoRisco)
+
+    println(
+      "===== RELATORIO DE CREDITO =====\n" +
+        s"TOTAL SOLICITADO: $somaValoresSolicitados\n" +
+        s"TOTAL APROVADO: $valorTotalAprovado\n" +
+        s"SCORE MÉDIO: $mediaScore\n" +
+        "Solicitacoes por status: \n" +
+        agrupadoPorStatus.foreach{ case (status, lista) =>
+          println(s"$status: " + lista.length)
+        }  +
+        s"Clientes de Alto Risco: \n" +
+
+        clientesDeAltoRisco.foreach(s => println(s"${s.cliente} (Score: ${s.scoreCredito})"))
+
+
+    )
   }
 }
 AnaliseSolicitacoes.main(Array())
