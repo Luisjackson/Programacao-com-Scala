@@ -45,8 +45,6 @@ object AnaliseSolicitacoes {
       }.toOption
     }
 
-    println(tentativaConversao)
-
     val solicitacoesValidas = tentativaConversao.filter(solicitacao =>
       solicitacao.status == "APROVADA" ||
         solicitacao.status == "REPROVADA" ||
@@ -57,60 +55,40 @@ object AnaliseSolicitacoes {
     val solicitacoesAprovadas = solicitacoesValidas.filter(solicitacao => solicitacao.status == "APROVADA")
 
     val valoresSolicitados = solicitacoesValidas.map(x => x.valorSolicitado)
-    println(valoresSolicitados)
 
     val somaValoresSolicitados = valoresSolicitados.reduce(_+_)
-    println(somaValoresSolicitados)
 
     val valorTotalAprovado = solicitacoesAprovadas.map(_.valorSolicitado).reduce(_+_)
-    println(valorTotalAprovado)
 
-    // Compare na lista de cliente, qual cliente tem o x1 (valorSolicitado) maior.
     val clienteMaiorValorSolicitado = solicitacoesValidas.reduce((x1, x2) => if(x1.valorSolicitado > x2.valorSolicitado) x1 else x2)
 
-    println("Cliente com Maior Valor Solicitado " + clienteMaiorValorSolicitado)
-
     val clienteMaiorScore = solicitacoesValidas.reduce((x1, x2) => if(x1.scoreCredito > x2.scoreCredito) x1 else x2)
-    println("Cliente com maior Score: " + clienteMaiorScore)
 
     val somaScore = solicitacoesValidas.map(_.scoreCredito).reduce(_+_)
-    println(somaScore)
 
     val mediaScore = somaScore.toDouble / solicitacoesValidas.length
-    println("Media de score: " + mediaScore)
 
     val agrupadoPorStatus = solicitacoesValidas.groupBy(_.status)
-    println(agrupadoPorStatus)
 
     val qtdAgrupadoPorStatus = agrupadoPorStatus.size
-    println("agrupado por status: "  + qtdAgrupadoPorStatus)
 
     val solicitacoesScoreBaixo = solicitacoesValidas.filter(x => x.scoreCredito < 500)
-    println(solicitacoesScoreBaixo)
-
-
-
-
-    println(solicitacoesValidas.length)
 
     val solicitacoesValidasAgrupadas = solicitacoesValidas.groupBy(_.status)
 
     val clientesDeAltoRisco = solicitacoesScoreBaixo.sortBy(_.scoreCredito)
-    println(clientesDeAltoRisco)
 
     println("\n===== RELATÓRIO DE CRÉDITO =====")
     println(s"TOTAL SOLICITADO: R$$ $somaValoresSolicitados")
     println(s"TOTAL APROVADO: R$$ $valorTotalAprovado")
-    println(s"SCORE MÉDIO: ${mediaScore.toInt}") // .toInt para tirar o quebrado se quiser
+    println(s"SCORE MÉDIO: ${mediaScore.toInt}")
 
     println("\nSolicitações por status:")
-    // O foreach roda solto aqui, sem somar com string!
     agrupadoPorStatus.foreach { case (status, lista) =>
       println(s"  * $status: ${lista.length}")
     }
 
     println("\nClientes de Alto Risco:")
-    // O outro foreach também roda solto aqui
     clientesDeAltoRisco.foreach { s =>
       println(s"  * ${s.cliente} (Score: ${s.scoreCredito})")
     }
