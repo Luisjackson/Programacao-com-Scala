@@ -81,7 +81,10 @@ object AnaliseSolicitacoes {
 
     val solicitacoesScoreBaixo = tentativaConversao.filter(x => x.scoreCredito < 500)
     println(solicitacoesScoreBaixo)
-    
+
+    agrupadoPorStatus.foreach{ case (status, lista) =>
+      println(s"$status: " + lista.length)
+    }
 
     
   }
