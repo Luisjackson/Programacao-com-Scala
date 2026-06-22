@@ -75,7 +75,14 @@ object AnaliseSolicitacoes {
 
     val agrupadoPorStatus = tentativaConversao.groupBy(_.status)
     println(agrupadoPorStatus)
+
+    val qtdAgrupadoPorStatus = agrupadoPorStatus.size
+    println(qtdAgrupadoPorStatus)
+
+    val solicitacoesScoreBaixo = tentativaConversao.filter(x => x.scoreCredito < 500)
+    println(solicitacoesScoreBaixo)
     
+
     
   }
 }
