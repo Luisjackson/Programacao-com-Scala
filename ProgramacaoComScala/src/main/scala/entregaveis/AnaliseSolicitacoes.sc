@@ -3,13 +3,13 @@ import scala.util.{Try, Success, Failure}
 object AnaliseSolicitacoes {
 
   case class Solicitacao(
-                         id: Int,
-                         cliente: String,
-                         rendaMensal: Double,
-                         valorSolicitado: Double,
-                         scoreCredito: Int,
-                         status: String
-                         )
+                          id: Int,
+                          cliente: String,
+                          rendaMensal: Double,
+                          valorSolicitado: Double,
+                          scoreCredito: Int,
+                          status: String
+                        )
 
   def main(args: Array[String]): Unit = {
 
@@ -33,14 +33,50 @@ object AnaliseSolicitacoes {
       ("16", "Erro4", "3000", "15000", "600", "INEXISTENTE") // status inválido
     )
 
-    val tentativaConversao = solicitacoesRaw.map{ linha =>
-      Try{
-
-      }
-
-
+    val tentativaConversao = solicitacoesRaw.flatMap { linha =>
+      Try {
+        Solicitacao(id = linha._1.toInt,
+          cliente = linha._2,
+          rendaMensal = linha._3.toDouble,
+          valorSolicitado = linha._4.toDouble,
+          scoreCredito = linha._5.toInt,
+          status = linha._6
+        )
+      }.toOption
     }
+
+    println(tentativaConversao)
+
+
+    val solicitacoesAprovadas = tentativaConversao.filter(solicitacao => solicitacao.status == "APROVADA")
+
+    val valoresSolicitados = tentativaConversao.map(x => x.valorSolicitado)
+    println(valoresSolicitados)
+
+    val somaValoresSolicitados = valoresSolicitados.reduce(_+_)
+    println(somaValoresSolicitados)
+
+    val valorTotalAprovado = solicitacoesAprovadas.map(_.valorSolicitado).reduce(_+_)
+    println(valorTotalAprovado)
+
+    // Compare na lista de cliente, qual cliente tem o x1 (valorSolicitado) maior.
+    val clienteMaiorValorSolicitado = tentativaConversao.reduce((x1, x2) => if(x1.valorSolicitado > x2.valorSolicitado) x1 else x2)
+
+    println("Cliente com Maior Valor Solicitado " + clienteMaiorValorSolicitado)
+
+    val clienteMaiorScore = tentativaConversao.reduce((x1, x2) => if(x1.scoreCredito > x2.scoreCredito) x1 else x2)
+    println("Cliente com maior Score: " + clienteMaiorScore)
+
+    val somaScore = tentativaConversao.map(_.scoreCredito).reduce(_+_)
+    println(somaScore)
+
+    val mediaScore = somaScore.toDouble / tentativaConversao.length
+    println("Media de score: " + mediaScore)
+
+    val agrupadoPorStatus = tentativaConversao.groupBy(_.status)
+    println(agrupadoPorStatus)
+    
+    
   }
-
-
 }
+AnaliseSolicitacoes.main(Array())
