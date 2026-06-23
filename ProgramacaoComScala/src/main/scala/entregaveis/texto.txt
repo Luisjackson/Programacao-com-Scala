@@ -1,0 +1,5 @@
+O Scala é uma linguagem fantástica
+Engenharia de dados com Scala é o futuro
+Processar dados é o trabalho do engenheiro de dados
+O futuro da engenharia é o processamento distribuído
+dados dados dados e mais dados
