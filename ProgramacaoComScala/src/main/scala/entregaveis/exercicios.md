@@ -733,3 +733,81 @@ Transações suspeitas de fraude:
 - ID: txn_123, Cliente: A, Valor: R$ 12.000, Motivo: Valor muito acima da média
 - ID: txn_456, Cliente: B, Valor: R$ 50, Motivo: 5 transações em menos de 1 minuto
 Essa versão já está organizada em uma progressão de aprendizado que começa por análises financeiras, alterna com exercícios de dados mais gerais e termina com dois projetos que se aproximam bastante de jobs Spark reais.
+
+
+---
+
+# 📊 Desafio: Pipeline de Análise de Texto (Word Count)
+
+## 📝 Contexto do Projeto
+Na Engenharia de Dados, o "Word Count" (Contador de Palavras) é o projeto clássico que introduz os conceitos de processamento distribuído e pipelines de dados (foi o primeiro exemplo utilizado pelo Google para demonstrar o MapReduce).
+
+Neste exercício, o objetivo é construir um mini-pipeline ETL (Extração, Transformação e Carga) puramente funcional em Scala. O programa deve ler um arquivo de texto não estruturado, aplicar regras de limpeza para remover ruídos e gerar um relatório analítico ranqueando as palavras mais utilizadas.
+
+---
+
+## 📂 Dados de Entrada (`texto.txt`)
+
+O pipeline deverá consumir um arquivo local contendo o seguinte texto bruto:
+
+> O Scala é uma linguagem fantástica
+> 
+> Engenharia de dados com Scala é o futuro
+> 
+> Processar dados é o trabalho do engenheiro de dados
+> 
+> O futuro da engenharia é o processamento distribuído
+> 
+>dados dados dados e mais dados
+
+---
+
+## ⚙️ Requisitos da Esteira de Dados
+
+O processamento deve ser dividido nas seguintes etapas lógicas (utilizando funções separadas para manter a organização do código):
+
+### 1. Extração (Extract)
+* Ler o arquivo `.txt` de forma segura.
+* Tratar possíveis falhas de infraestrutura (como arquivo ausente) utilizando o encapsulamento `Try`.
+* Retornar o conteúdo como uma `List[String]`.
+
+### 2. Limpeza e Normalização (Transform)
+* Receber a lista de frases e **quebrá-las em palavras individuais** (utilizando o espaço em branco `" "` como delimitador).
+* Padronizar todas as palavras para **letras minúsculas** (para garantir que "Scala" e "scala" sejam contabilizadas como a mesma entidade).
+* **Dica:** Utilize `.flatMap` combinado com `.split(" ")` e `.toLowerCase`.
+
+### 3. Filtro de Regras de Negócio (Transform)
+Para evitar sujeira no relatório analítico, o pipeline deve descartar:
+* Espaços em branco isolados gerados no momento do corte (strings vazias `""`).
+* Palavras com **menos de 3 caracteres** (como artigos e preposições: "o", "a", "é", "de", "do", "e").
+* **Dica:** Utilize `.filter`.
+
+### 4. Agregação e Cálculo de Frequência (Transform/Reduce)
+* Agrupar a lista de palavras limpas.
+* Calcular a frequência absoluta (quantidade de vezes que cada palavra apareceu no texto inteiro).
+* **Dica:** Utilize `.groupBy` e manipule os valores do mapa gerado.
+
+### 5. Carga e Relatório (Load/Report)
+* Ordenar o agrupamento de forma **decrescente** (da palavra mais repetida para a menos repetida).
+* Imprimir no terminal um relatório limpo e formatado.
+
+---
+
+## 🎯 Saída Esperada (Terminal)
+
+Após passar por todas as etapas do pipeline, o console deverá exibir um resultado semelhante a este:
+
+```text
+Sucesso! Foram lidas 5 linhas do arquivo.
+
+====== RELATÓRIO DE FREQUÊNCIA DE PALAVRAS ======
+
+1º - x: 7 ocorrências
+2º - x: 2 ocorrências
+3º - x: 2 ocorrências
+4º - x: 2 ocorrências
+5º - x: 1 ocorrências
+6º - x: 1 ocorrências
+7º - x: 1 ocorrências
+...
+=================================================
